@@ -18,6 +18,7 @@ end
 
 function init()
     func:AddGraph("Background.png")
+    func:AddGraph("Unavailable.png")
 end
 
 function update()
@@ -25,4 +26,6 @@ end
 
 function draw()
     func:DrawGraph(0, 0, "Background.png")
+    func:DrawGraph(0, 0, "Unavailable.png")
+    func:DrawText(777, 900, "Press the ESC key to exit this menu.")
 end
