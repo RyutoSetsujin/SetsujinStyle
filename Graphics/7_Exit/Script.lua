@@ -18,6 +18,8 @@ end
 
 function init()
     func:AddGraph("Background.png")
+    func:AddGraph("Text.png")
+    func:AddGraph("Text2.png")
 end
 
 function update()
@@ -25,4 +27,6 @@ end
 
 function draw()
     func:DrawGraph(0, 0, "Background.png")
+    func:DrawGraph(0, 0, "Text.png")
+    func:DrawGraph(0, 0, "Text2.png")
 end

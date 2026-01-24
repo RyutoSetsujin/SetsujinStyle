@@ -1,0 +1,51 @@
+{
+    "1": {
+        "StageName": {
+            "strings": {
+                "default": "Song Select 2"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "Aw hell nah"
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "demo2",
+        "Restricted1P": true,
+        "LEGACY_MenuBoxColor": "Green"
+    },
+	"2": {
+        "StageName": {
+            "strings": {
+                "default": "OpenTaiko's General Store"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "Waste your hard earned coins for things you will never use!"
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "coin_shop",
+        "Restricted1P": false,
+        "LEGACY_MenuBoxColor": "Cyan"
+    },
+    "3": {
+        "StageName": {
+            "strings": {
+                "default": "Secret Vault"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "The master of the keys awaits..."
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "secret_vault",
+        "Restricted1P": true,
+        "LEGACY_MenuBoxColor": "Purple"
+    },
+    "count": 3
+}

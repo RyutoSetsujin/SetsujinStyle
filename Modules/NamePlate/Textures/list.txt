@@ -29,3 +29,10 @@
 28 - OpTk Light
 29 - OpTk Dark
 30 - NEP0
+31 - DRT Sky
+32 - OpTk Chapter IV
+33 - Status Clear
+34 - Status Full Combo
+35 - Status Perfect
+36 - Template
+37 - OpTk Chapter V

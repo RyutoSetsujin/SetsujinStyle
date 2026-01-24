@@ -1,5 +1,3 @@
-import ('System.Drawing')
-
 local dan_types = { "Clear", "FC", "AP" }
 
 local config = nil
@@ -31,10 +29,13 @@ local config_title_plate_offset_y = nil
 local config_titletypes = { "0", "1" }
 local config_titleplate_effects = { }
 
-local nameplate_count = 32
+local nameplate_count = 46
 
 local base = nil
 local dan_gradation = { }
+
+local dan_plate = nil
+local dan_plategradation = { }
 
 local players = { }
 local players_blue = nil
@@ -46,22 +47,24 @@ local title_plate_star_big = { }
 local title_plate_star_small = { }
 local slash = nil
 
-local title_stars_folders = { "1", "2", "3" }
+local title_stars_folders = { "1", "2", "3", "4" }
 local title_stars = { { } }
 
 local title_badge_of_achievement = nil
-local nameplates_achievement = {134,135,136,78,66,71,44,14,17}
+local nameplates_achievement = {134,135,136,78,66,71,44,11,215,218,220,225,229,234,239,246,251,256,260,292}
 local title_badge_of_team_member = nil
-local nameplates_team_member = {}
+local nameplates_team_member = {291}
 
 local font_name_normal_size = nil
 local font_name_withtitle = nil
+local font_name_full = nil
 local font_title = nil
 local font_dan = nil
 local player_data = { nil, nil, nil, nil, nil }
 
 local name_titlekey = { nil, nil, nil, nil, nil }
 local title_titlekey = { nil, nil, nil, nil, nil }
+local dantitle_titlekey = { nil, nil, nil, nil, nil }
 local dan_titlekey = { nil, nil, nil, nil, nil }
 local notitle = { false, false, false, false, false }
 local nodan = { false, false, false, false, false }
@@ -216,9 +219,12 @@ function implDrawRarityStars(o_x, o_y, opacity, rarity)
 	--Epic
 	elseif rarity == 4 then
 		star_count = 2
-	--Legendary / Mythical
-	elseif rarity >= 5 then
+	--Legendary
+	elseif rarity == 5 then
 		star_count = 3
+	--Mythical
+	elseif rarity >= 6 then
+		star_count = 4
 	end
 	
 	if star_count > 0 then
@@ -273,12 +279,15 @@ function setInfos(player, name, title, dan, data)
     notitle[player_lua] = (title == "")
     nodan[player_lua] = (player_data[player_lua].Dan == nil or player_data[player_lua].Dan == "")
 
-    if notitle[player_lua] then
+    if not(nodan[player_lua]) and notitle[player_lua] then
+        name_titlekey[player_lua] = createTitleTextureKey(name, font_name_withtitle, 99999)
+    elseif notitle[player_lua] then
         name_titlekey[player_lua] = createTitleTextureKey(name, font_name_normal_size, 99999)
     else
-        name_titlekey[player_lua] = createTitleTextureKey(name, font_name_withtitle, 99999)
+        name_titlekey[player_lua] = createTitleTextureKey(name, font_name_full, 99999)
     end
-    title_titlekey[player_lua] = createTitleTextureKey(title, font_title, 99999, Color.FromArgb(0,0,0,1), Color.FromArgb(0,0,0,0))
+    title_titlekey[player_lua] = createTitleTextureKey(title, font_title, 99999, COLOR:CreateColorFromRGBA(0,0,0,255), COLOR:CreateColorFromRGBA(0,0,0,0))
+    dantitle_titlekey[player_lua] = createTitleTextureKey(dan, font_title, 99999)
     dan_titlekey[player_lua] = createTitleTextureKey(dan, font_dan, 99999)
 end
 
@@ -290,6 +299,9 @@ function loadAssets()
 
     config_font_name_withtitle_size = getNum(config["font_name_withtitle"]["size"])
     config_font_name_withtitle_maxsize = getNum(config["font_name_withtitle"]["maxsize"])
+
+    config_font_name_full_size = getNum(config["font_name_full"]["size"])
+    config_font_name_full_maxsize = getNum(config["font_name_full"]["maxsize"])
 
     config_font_title_size = getNum(config["font_title"]["size"])
     config_font_title_maxsize = getNum(config["font_title"]["maxsize"])
@@ -326,9 +338,12 @@ function loadAssets()
 	title_badge_of_achievement = loadTexture("Badges/0.png")
 	title_badge_of_team_member = loadTexture("Badges/1.png")
 
+    dan_plate = loadTexture("Title_Dan/0.png")
     for i = 1, 3 do 
         dan_gradation[i] = loadTexture("Dan_"..dan_types[i]..".png")
+        dan_plategradation[i] = loadTexture("Title_Dan/"..dan_types[i]..".png")
     end
+
 
     for i = 1, 5 do 
 		players[i] = loadTexture(tostring(i).."P.png")
@@ -384,6 +399,7 @@ function loadAssets()
     
     font_name_normal_size = loadFontRenderer(config_font_name_normal_size, "regular")
     font_name_withtitle = loadFontRenderer(config_font_name_withtitle_size, "regular")
+    font_name_full = loadFontRenderer(config_font_name_full_size, "regular")
     font_title = loadFontRenderer(config_font_title_size, "regular")
     font_dan = loadFontRenderer(config_font_dan_size, "regular")
 end
@@ -408,10 +424,17 @@ function drawDan(o_x, o_y, opacity, type, titleTex)
     
     --Dan text
     if not(nodan[player_lua]) then
-        titleTex:tSetScale(math.min(config_font_dan_maxsize / titleTex.szTextureSize.Width, 1.0), 1.0)
-        titleTex.Opacity = opacity
-        titleTex:t2D_DisplayImage_AnchorCenter(x + config_text_dan_offset_x, y + config_text_dan_offset_y)
+        titleTex:SetScale(math.min(config_font_dan_maxsize / titleTex.Width, 1.0), 1.0)
+        titleTex:SetOpacity(opacity)
+        titleTex:DrawAtAnchor(x + config_text_dan_offset_x, y + config_text_dan_offset_y, "center")
     end
+end
+
+function drawDanTitlePlate(x, y, opacity, type)
+    dan_plate.Opacity = opacity
+    dan_plategradation[type].Opacity = opacity
+    dan_plate:t2D_DisplayImage(x + config_title_plate_offset_x, y + config_title_plate_offset_y)
+    dan_plategradation[type]:t2D_DisplayImage(x + config_title_plate_offset_x, y + config_title_plate_offset_y)
 end
 
 function drawTitlePlate(o_x, o_y, opacity, titletype, titleTex, rarityInt, nameplateId)
@@ -439,9 +462,9 @@ function drawTitlePlate(o_x, o_y, opacity, titletype, titleTex, rarityInt, namep
 	implDrawPlayerRing(x, y, opacity, 1, 1)
 
 	--Title/Name text
-    titleTex:tSetScale(math.min(config_font_title_maxsize / titleTex.szTextureSize.Width, 1.0), 1.0)
-    titleTex.Opacity = opacity
-    titleTex:t2D_DisplayImage_AnchorCenter(x + config_text_title_offset_x, y + config_text_title_offset_y)
+    titleTex:SetScale(math.min(config_font_title_maxsize / titleTex.Width, 1.0), 1.0)
+    titleTex:SetOpacity(opacity)
+    titleTex:DrawAtAnchor(x + config_text_title_offset_x, y + config_text_title_offset_y, "center")
 end
 
 function update()
@@ -466,10 +489,15 @@ function draw(x, y, opacity, player, side)
     base.Opacity = opacity
     base:t2D_DisplayImage(x, y)
 
+    --Player number
+	implDrawPlayerRing(x, y, opacity, player_lua, side_lua)
+    
     --Upper (title) plate
     titleplate_index = player_data[player_lua].TitleType + 1
     if not(notitle[player_lua]) then
         implDrawTitlePlate(x, y, opacity, titleplate_index)
+    elseif not(nodan[player_lua]) then
+        drawDanTitlePlate(x, y, opacity, player_data[player_lua].DanType + 1)
     end
 	
 	--Rarity stars
@@ -479,7 +507,7 @@ function draw(x, y, opacity, player, side)
 	implDrawBadges(x, y, opacity, nameplateId)
 
     --Dan plate
-    if not(player_data[player_lua].Dan == nil) and not(player_data[player_lua].Dan == "") then
+    if not(nodan[player_lua]) and not(notitle[player_lua]) then
         dan_base.Opacity = opacity
         dan_base:t2D_DisplayImage(x, y)
         dan_gradation[player_data[player_lua].DanType + 1].Opacity = opacity
@@ -489,11 +517,8 @@ function draw(x, y, opacity, player, side)
     --Glow
     implDrawTitleEffect(x, y, titleplate_index)
 
-    --Player number
-	implDrawPlayerRing(x, y, opacity, player_lua, side_lua)
-
     --Dan text
-    if not(nodan[player_lua]) then
+    if not(nodan[player_lua]) and not(notitle[player_lua]) then
         tx_dan = getTextTex(dan_titlekey[player_lua], false, false)
         tx_dan:tSetScale(math.min(config_font_dan_maxsize / tx_dan.szTextureSize.Width, 1.0), 1.0)
         tx_dan.Opacity = opacity
@@ -501,7 +526,17 @@ function draw(x, y, opacity, player, side)
     end
 
     --Title/Name text
-    if notitle[player_lua] then
+    if not(nodan[player_lua]) and notitle[player_lua] then
+        tx_title = getTextTex(dantitle_titlekey[player_lua], false, false)
+        tx_title:tSetScale(math.min(config_font_name_normal_maxsize / tx_title.szTextureSize.Width, 1.0), 1.0)
+        tx_title.Opacity = opacity
+        tx_title:t2D_DisplayImage_AnchorCenter(x + config_text_title_offset_x, y + config_text_title_offset_y)
+
+        tx_name = getTextTex(name_titlekey[player_lua], false, false)
+        tx_name:tSetScale(math.min(config_font_name_withtitle_maxsize / tx_name.szTextureSize.Width, 1.0), 1.0)
+        tx_name.Opacity = opacity
+        tx_name:t2D_DisplayImage_AnchorCenter(x + config_text_name_withtitle_offset_x, y + config_text_name_withtitle_offset_y)
+    elseif notitle[player_lua] then
         tx_name = getTextTex(name_titlekey[player_lua], false, false)
         tx_name:tSetScale(math.min(config_font_name_normal_maxsize / tx_name.szTextureSize.Width, 1.0), 1.0)
         tx_name.Opacity = opacity
@@ -513,11 +548,12 @@ function draw(x, y, opacity, player, side)
         tx_title:t2D_DisplayImage_AnchorCenter(x + config_text_title_offset_x, y + config_text_title_offset_y)
 
         tx_name = getTextTex(name_titlekey[player_lua], false, false)
-        tx_name:tSetScale(math.min(config_font_name_withtitle_maxsize / tx_name.szTextureSize.Width, 1.0), 1.0)
         tx_name.Opacity = opacity
         if nodan[player_lua] then
+            tx_name:tSetScale(math.min(config_font_name_withtitle_maxsize / tx_name.szTextureSize.Width, 1.0), 1.0)
             tx_name:t2D_DisplayImage_AnchorCenter(x + config_text_name_withtitle_offset_x, y + config_text_name_withtitle_offset_y)
         else
+            tx_name:tSetScale(math.min(config_font_name_full_maxsize / tx_name.szTextureSize.Width, 1.0), 1.0)
             tx_name:t2D_DisplayImage_AnchorCenter(x + config_text_name_full_offset_x, y + config_text_name_full_offset_y)
         end
     end
