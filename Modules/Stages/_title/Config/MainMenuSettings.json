@@ -2,7 +2,7 @@
     "1": {
         "StageName": {
             "strings": {
-                "default": "Song Select 2"
+                "default": "Ye Old Song Select 2"
             }
         },
         "StageDescription": {
@@ -18,28 +18,12 @@
 	"2": {
         "StageName": {
             "strings": {
-                "default": "OpenTaiko's General Store"
-            }
-        },
-        "StageDescription": {
-            "strings": {
-                "default": "Waste your hard earned coins for things you will never use!"
-            }
-        },
-        "StageType": "Lua",
-        "LuaStageName": "coin_shop",
-        "Restricted1P": false,
-        "LEGACY_MenuBoxColor": "Cyan"
-    },
-    "3": {
-        "StageName": {
-            "strings": {
                 "default": "Secret Vault"
             }
         },
         "StageDescription": {
             "strings": {
-                "default": "The master of the keys awaits..."
+                "default": "The master of the keys is awaiting..."
             }
         },
         "StageType": "Lua",
@@ -47,5 +31,85 @@
         "Restricted1P": true,
         "LEGACY_MenuBoxColor": "Purple"
     },
-    "count": 3
+	"3": {
+        "StageName": {
+            "strings": {
+                "default": "OpenTaiko's General Store"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "Waste your hardly earned coins for things you will never use!"
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "coin_shop",
+        "Restricted1P": false,
+        "LEGACY_MenuBoxColor": "Cyan"
+    },
+	"4": {
+        "StageName": {
+            "strings": {
+                "default": "Taiko Towers"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "The Towers have been Towering all along"
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "tower_select",
+        "Restricted1P": false,
+        "LEGACY_MenuBoxColor": "Orange"
+    },
+	"5": {
+        "StageName": {
+            "strings": {
+                "default": "Intro Nokon"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "\"I'm ze host bitch!\""
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "intro_nokon",
+        "Restricted1P": false,
+        "LEGACY_MenuBoxColor": "Pink"
+    },
+    "6": {
+        "StageName": {
+            "strings": {
+                "default": "song_select_nameplate"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "Testing nameplate graphics for dream song select"
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "song_select_nameplate",
+        "Restricted1P": true,
+        "LEGACY_MenuBoxColor": "Red"
+    },
+    "7": {
+        "StageName": {
+            "strings": {
+                "default": "Ye New Song Select"
+            }
+        },
+        "StageDescription": {
+            "strings": {
+                "default": "Testing dream song select"
+            }
+        },
+        "StageType": "Lua",
+        "LuaStageName": "song_select",
+        "Restricted1P": true,
+        "LEGACY_MenuBoxColor": "Red"
+    },
+    "count": 7
 }

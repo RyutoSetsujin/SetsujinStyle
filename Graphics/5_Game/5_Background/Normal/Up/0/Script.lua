@@ -16,9 +16,9 @@ function init()
         if p1IsBlue then
             side = 2
         end
-        func:AddGraph(tostring(side).."P.png")
+        func:AddGraph(tostring(side).."P_A.png")
     end
-    func:AddGraph("Clear.png")
+    func:AddGraph("Clear_A.png")
 end
 
 function update()
@@ -45,10 +45,10 @@ function draw()
         end
         
         for i = 0, 5 do
-            func:DrawGraph(x + (width * i), y[player], tostring(side).."P.png")
+            func:DrawGraph(x + (width * i), y[player], tostring(side).."P_A.png")
 
-            func:SetOpacity(clearOpacity[player], "Clear.png")
-            func:DrawGraph(x + (width * i), y[player], "Clear.png")
+            func:SetOpacity(clearOpacity[player], "Clear_A.png")
+            func:DrawGraph(x + (width * i), y[player], "Clear_A.png")
         end
     end
 end
