@@ -8,6 +8,8 @@ Before using:
 - Install all fonts included in the Fonts folder
 ; If you don't like the included font, keep the default ones (MS Gothic), but keep in mind that the skin is built around the given fonts.
 
+- The current BGM is taken from DJMAX Respect, specifically the DJMAX Respect Original Soundtrack available on Steam. Upon the full release of the skin, the BGM will be changed to something original.
+
 Credits : 
 
 - Font : http://pm85122.onamae.jp/851H_kktt.html
